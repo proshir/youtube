@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    {% for video in object_list %}
+    <div class="col-md-3">
+        <div class="card h-100">
+            <a href="{% url 'video_detail' pk=video.pk %}">
+                <img src="{{ video.thumbnail.url }}" class="card-img-top" style="height: 250px; object-fit: scale-down;" alt="{{ video.topic }}">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ video.topic }}</h5>
+                <p class="card-text">{{ video.description }}</p>
+                <p class="card-text"><small class="text-muted">{{ video.uploaded_at }}</small></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% if page_obj.has_previous or page_obj.has_next %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+        <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
